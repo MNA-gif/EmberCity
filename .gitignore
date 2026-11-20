@@ -1,0 +1,34 @@
+# Unreal generated folders
+Binaries/
+Intermediate/
+Saved/
+DerivedDataCache/
+Build/
+Packaged/
+Plugins/*/Binaries/
+Plugins/*/Intermediate/
+
+# IDE / OS
+.vs/
+.vscode/
+.idea/
+*.sln
+*.suo
+*.VC.db
+*.opensdf
+Thumbs.db
+.DS_Store
+
+# Claude session logs and local settings (never commit)
+_sessions/
+.claude/settings.local.json
+.claude/projects/
+
+# Secrets
+.env
+*.pem
+*.key
+
+# Per-user editor folders
+Content/Developers/
+Content/Collections/

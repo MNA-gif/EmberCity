@@ -1,0 +1,17 @@
+# Progress (newest on top)
+
+Format per entry: date · name · Done / Next / Problems / Commit.
+
+---
+
+## 20.11.2026 · Nebil (2)
+- **Done:** team skills moved from `_setup/skills/` to `.claude/skills/` (team-rules, team-unreal, team-build), `.mcp.json` at the root, `Content/Developers/` + `Content/Collections/` ignored; `git init` on `main` with Git LFS, first commit; branches `nebil/ember`, `emrecan/health-weapon`, `kartal/frost`, `karahan/fuel-hud` created from it.
+- **Next:** Nebil: push to the team GitHub remote; then `Core/` assets (`PDA_Tuning`, `DA_Tuning`, 3 interfaces), `L_Chapter1` + 4 test maps through the editor MCP. Everyone: clone, check out your branch, send 3–5 rules for B1.
+- **Problems:** no remote yet (`git remote -v` empty); all team-skill rules are still `[Nebil]` only.
+- **Commit:** `[Nebil] setup: git, LFS, team skills in .claude/skills`
+
+## 20.11.2026 · Nebil
+- **Done:** project from the First Person template (UE 5.8, Blueprint); repo setup: `.gitignore`, Git LFS (`.gitattributes`), `.mcp.json`, `CLAUDE.md`, `docs/technical_design.md` with the Contracts, gameplay tags in `Config/DefaultGameplayTags.ini`, team skills (first version, Nebil's rules).
+- **Next:** Nebil: create `Core/` assets (`PDA_Tuning`, `DA_Tuning`, 3 interfaces) and `L_Chapter1`. Everyone: clone, create your branch, send 3–5 rules from your Part A skills to Nebil for the team skills.
+- **Problems:** none yet.
+- **Commit:** `[Nebil] setup: repo, contracts, team skills`
