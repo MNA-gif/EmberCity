@@ -4,6 +4,11 @@ Format per entry: date · name · Done / Next / Problems / Commit.
 
 ---
 
+## 21.11.2026 · Emrecan · branch `emrecan/health-weapon`
+- **Done:** `Systems/Emrecan/BPC_Health` (Player/Frost max health from DA_Tuning by owner tag via `BPI_Tagged`, `ApplyDamage(Amount, DamageInstigator)`, `OnHealthChanged`, `OnDied`), `BPC_Weapon` (line trace `Weapon_Range`, mag/reserve/interval/reload from DA_Tuning, damages only `Team.Frost` and not `State.Dead` through `BPI_Damageable`, `OnAmmoChanged`), `Player/BP_Player` (template copy + both components, `GameplayTags`=`Team.Player`, `BPI_Tagged`, `BPI_Damageable`→Health, `OnDied` adds `State.Dead`, `IA_Fire` LMB / `IA_Reload` R in `IMC_Player`); `L_Test_Emrecan` GameMode Override = `BP_GM_TestEmrecan` (pawn BP_Player). Tested in PIE: Frost dummy 40→20→0 + `State.Dead`, no-tag and Frost+Dead targets take no damage, auto reload 12/36, player 100→70→0 + `State.Dead`, real LMB/R input.
+- **Next:** Nebil: add `BPC_Health.ApplyDamage(Amount, DamageInstigator)` to technical_design §4.2b (Kartal's BP_Frostling forwards to it), merge this branch, set BP_Player as pawn on main; Karahan: bind HUD to `OnHealthChanged`/`OnAmmoChanged`.
+- **Problems:** no crosshair yet (trace uses eye view point, not the camera socket); reload with reserve smaller than a magazine not tested; dev helpers `BP_TestDummy`, `BP_TestShooter` stay in Systems/Emrecan.
+
 ## 20.11.2026 · Nebil (8) · main · contract change requested by Emrecan
 - **Done:** technical_design.md first, then code: `PDA_Tuning` / `DA_Tuning` + `Weapon_Range` 5000 cm, `Weapon_StartReserve` 48 (21 fields); `State.Dead` is added by the dying actor in its own `OnDied` (BP_Player: Emrecan, BP_Frostling: Kartal); `BPC_Weapon` damages only `Team.Frost` and not `State.Dead`; new interface `Core/Interfaces/BPI_Tagged.GetGameplayTags() → Tags` so systems read another actor's tags without a cast; `BP_EmberCore` implements it (returns `GameplayTags`).
 - **Tested:** DA_Tuning shows the 2 new values; PIE in L_Chapter1: `core.GetGameplayTags()` → `Target.EmberCore`, Ember still drains (89.67 at t=10.33); BP_EmberCore class implements `BPI_Tagged_C`.
