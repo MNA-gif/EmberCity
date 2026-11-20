@@ -6,8 +6,9 @@ Format per entry: date · name · Done / Next / Problems / Commit.
 
 ## 20.11.2026 · Nebil (2)
 - **Done:** team skills moved from `_setup/skills/` to `.claude/skills/` (team-rules, team-unreal, team-build), `.mcp.json` at the root, `Content/Developers/` + `Content/Collections/` ignored; `git init` on `main` with Git LFS, first commit; branches `nebil/ember`, `emrecan/health-weapon`, `kartal/frost`, `karahan/fuel-hud` created from it.
-- **Next:** Nebil: push to the team GitHub remote; then `Core/` assets (`PDA_Tuning`, `DA_Tuning`, 3 interfaces), `L_Chapter1` + 4 test maps through the editor MCP. Everyone: clone, check out your branch, send 3–5 rules for B1.
-- **Problems:** no remote yet (`git remote -v` empty); all team-skill rules are still `[Nebil]` only.
+- **Done (later):** published as private repo `MNA-gif/EmberCity` (GitHub Desktop); `main` + 4 member branches pushed, all LFS objects uploaded.
+- **Next:** Nebil: invite Emrecan, Kartal, Karahan as collaborators on GitHub; then `Core/` assets (`PDA_Tuning`, `DA_Tuning`, 3 interfaces), `L_Chapter1` + 4 test maps through the editor MCP. Everyone: clone, check out your branch, send 3–5 rules for B1.
+- **Problems:** repo is private, members cannot clone until invited; all team-skill rules are still `[Nebil]` only.
 - **Commit:** `[Nebil] setup: git, LFS, team skills in .claude/skills`
 
 ## 20.11.2026 · Nebil
