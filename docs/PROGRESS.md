@@ -4,6 +4,14 @@ Format per entry: date · name · Done / Next / Problems / Commit.
 
 ---
 
+## 20.11.2026 · Nebil (6) · main
+- **Done:** `nebil/ember` fast-forwarded into `main` (Core, BPC_Ember, BP_EmberCore, BP_ChapterDirector). On main: `L_Chapter1` has `EmberCore` at (1200, 0, floor), `ChapterDirector`, `NavMeshBounds` (40 × 40 m, ±300 z) → `RecastNavMesh-Default`; `Config/DefaultEngine.ini` GameDefaultMap + EditorStartupMap = `L_Chapter1`.
+- **Tested (PIE, L_Chapter1):** `[Chapter] Started`, pawn spawns; 5 fuel → `Ended, won = true`; Retry reloads; 500 damage → `Ended, won = false`; 0 Blueprint runtime errors. NavMesh: core reachable from 19/24 random floor points; the 5 misses are closed pockets of the template map (e.g. around (-1539,-1433), (1667,-1587), (126,-456)).
+- **Not tested:** end screen in L_Chapter1 (`EndScreenClass` empty until Karahan's `WBP_EndScreen` is on main → cursor stays off on end); packaged build.
+- **Next:** team: `git merge main` into your branch, use `GameplayTags` and §4.2b. Kartal: spawn Frost only in the connected floor area (test with `P` in the viewport). Nebil: merge member branches one by one and play after each.
+- **Problems:** template map has disconnected floor areas (start-to-start full paths 344/552).
+- **Commit:** `[Nebil] chapter1: core, director, navmesh, default map`
+
 ## 20.11.2026 · Nebil (5) · branch `nebil/ember`
 - **Done:** `Systems/Nebil/BP_ChapterDirector` (Actor, one per level): BeginPlay prints `[Chapter] Started`, finds `BP_EmberCore`, stores its `Ember` and binds `OnEmberDepleted` → `EndChapter(false)`, `OnEmberIgnited` → `EndChapter(true)`. `EndChapter(bWonIn)` runs once (`bEnded`), stops the Ember, calls `OnChapterEnded(bWon)`, prints the result, and if `EndScreenClass` is set creates it, adds to viewport, input Game and UI + cursor (team-unreal R4). `RetryChapter()` = Game Only, hide cursor, reopen current level. Contracts §4.2b added (callable functions, `EndScreenClass`, player death pending `BPC_Health`). Dev widget `WBP_EndScreenTest` (empty) set only on the director placed in `L_Test_Nebil`.
 - **Tested (PIE, L_Test_Nebil):** win: 5 fuel → log `[Chapter] Ended, won = true`, bEnded/bWon true, cursor on; 500 damage after the win → no second end. Retry → level reloads (t=0.67, Heat 99.3, Fuel 0, bEnded false, cursor off). Fail: ApplyDamage(500) → `[Chapter] Ended, won = false`, cursor on. No Blueprint runtime errors in the log.
