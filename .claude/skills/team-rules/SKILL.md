@@ -41,5 +41,15 @@ Merged by the integration owner (Nebil). Each rule says who brought it. Details:
 - **Rule:** before a download say name, source, licence, size and wait; write the licence into `ThirdPartyLicenses/`. Deleted files go to the Recycle Bin.
 - **Check:** each new pack has a licence line.
 
+### R8 · Never let git rewrite `.uasset` files under an open editor `[Nebil]`
+- **Rule:** `git pull`, `checkout`, `merge` that change Content files only with the editor closed. With the editor open, only moves that keep the files the same: e.g. fast-forward a branch with `git branch -f <branch> <commit>` and then check it out (same tree, no file changes).
+- **Why:** the editor keeps loaded packages in memory and saves them back over the new files; on 20.11 `nebil/ember` → `main` was done this way with the editor open and nothing was lost.
+- **Check:** before such a command, `git diff --stat HEAD <target> -- Content` is empty or the editor is closed.
+
+### R9 · Use the system's functions listed in §4.2b, nothing else `[Nebil]`
+- **Rule:** besides interfaces and dispatchers, another system may only call the functions in technical_design.md §4.2b (e.g. `RetryChapter()` from the end screen, `AddFuel` / `LoseHeat` on `BPC_Ember` through the Core's interfaces).
+- **Why:** keeps "no system edits another system's Blueprint" (B4) true while the end screen still needs a Retry.
+- **Check:** every cross-system node in your Blueprint is an interface message, a dispatcher bind or a §4.2b function.
+
 ## From the team (to be merged)
 <!-- Emrecan, Kartal, Karahan: send 1–2 rules each from your Part A skills; Nebil adds them here as R8+ with your name. -->

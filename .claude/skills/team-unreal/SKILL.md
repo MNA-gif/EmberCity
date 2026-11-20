@@ -41,5 +41,20 @@ Each rule says who brought it.
 - **Rule:** on ECONNREFUSED run `ModelContextProtocol.StartServer` in the editor console; after two failed calls stop and tell the user.
 - **Check:** one cheap call (list actors) works before real work starts.
 
+### R8 · The gameplay tag variable is `GameplayTags`, never `Tags` `[Nebil]`
+- **Rule:** the `GameplayTagContainer` variable on every gameplay actor is named `GameplayTags` (Instance Editable). Do not name variables or functions like an `AActor` member (`Tags`, `GetLevel`, `GetOwner`, `Layers`).
+- **Why:** `AActor` already has `Tags` (`TArray<FName>`); a second `Tags` does not compile or silently shadows it. Hit on 20.11 while building `BP_EmberCore`; same trap as my midterm's `GetLevel` UHT error.
+- **Check:** `BlueprintService.list_variables(<bp>)` shows `GameplayTags` of type `GameplayTagContainer`; no variable named like a parent-class member.
+
+### R9 · Building Blueprints through VibeUE: the traps we hit `[Nebil]`
+- **Rule:** (1) after `add_member_variable` call `BlueprintEditorLibrary.set_blueprint_variable_instance_editable` and set defaults with `set_variable_default_value`, then check the CDO value; (2) object defaults (e.g. `Tuning` = `DA_Tuning`) with `BlueprintService.set_property(bp, "Tuning", "/Game/EmberCity/Core/DA_Tuning.DA_Tuning")` (VibeUE blocks direct CDO edits); (3) interface events with `BlueprintEditorLibrary.add_event_override(bp, "ApplyDamage", unreal.IntPoint(x, y))`; (4) "Call <Dispatcher>" nodes with `add_call_delegate_node`, other `SPAWN …` keys with `create_node_by_key("NODE K2Node_CreateWidget")` - `build_graph` rejects both; (5) non-pure calls (`GetActorOfClass`, `GetCurrentLevelName`) need their exec pin wired or they are pruned.
+- **Why:** each one cost a failed build or a silent wrong default on 20.11 (`BPC_Ember`, `BP_EmberCore`, `BP_ChapterDirector`).
+- **Check:** `build_graph` result `success: True` with `nodes n/n`, `conns n/n`, `defaults n/n`, and no "pruned" warning.
+
+### R10 · Spawn and target only in the connected floor area of `L_Chapter1` `[Nebil]`
+- **Rule:** `L_Chapter1` is the First Person template map; parts of its floor are closed pockets. Spawn points and pickups go where a path to the Core exists.
+- **Why:** NavMesh test on 20.11: the Core was reachable from 19 of 24 random floor points; the misses were pockets around (-1539,-1433), (1667,-1587), (126,-456).
+- **Check:** `NavigationSystemV1.find_path_to_location_synchronously(world, spawn, core_side_point)` is valid and not partial for every spawn point; or `P` in the viewport shows green connected to the Core.
+
 ## From the team (to be merged)
 <!-- Emrecan (weapon/health), Kartal (AI), Karahan (UI): add the traps you hit as R8+ with your name. -->

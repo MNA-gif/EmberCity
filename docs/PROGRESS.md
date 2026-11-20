@@ -4,6 +4,11 @@ Format per entry: date · name · Done / Next / Problems / Commit.
 
 ---
 
+## 20.11.2026 · Nebil (7) · main
+- **Done:** checked the team plan (Kül Şehri doc) against the repo: Nebil's rule mapping for B1 is complete (team-unreal ← unreal-gotchas R1/R3/R4/R7/R13/R14, team-rules ← my-workflow R2/R3/R8/R10/R11/R13, team-build ← unreal-packaging + script). Added today's lessons: team-unreal R8 `GameplayTags` name, R9 VibeUE traps, R10 connected floor in `L_Chapter1`; team-rules R8 git under an open editor, R9 §4.2b functions.
+- **Next:** team sends 3–5 rules each (B1 needs every name); Kül Şehri doc: `Tags` → `GameplayTags`, add §4.2b; invite collaborators and share the repo link.
+- **Commit:** `[Nebil] skills: lessons from building ember + chapter`
+
 ## 20.11.2026 · Nebil (6) · main
 - **Done:** `nebil/ember` fast-forwarded into `main` (Core, BPC_Ember, BP_EmberCore, BP_ChapterDirector). On main: `L_Chapter1` has `EmberCore` at (1200, 0, floor), `ChapterDirector`, `NavMeshBounds` (40 × 40 m, ±300 z) → `RecastNavMesh-Default`; `Config/DefaultEngine.ini` GameDefaultMap + EditorStartupMap = `L_Chapter1`.
 - **Tested (PIE, L_Chapter1):** `[Chapter] Started`, pawn spawns; 5 fuel → `Ended, won = true`; Retry reloads; 500 damage → `Ended, won = false`; 0 Blueprint runtime errors. NavMesh: core reachable from 19/24 random floor points; the 5 misses are closed pockets of the template map (e.g. around (-1539,-1433), (1667,-1587), (126,-456)).
