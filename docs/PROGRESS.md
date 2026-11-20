@@ -4,6 +4,12 @@ Format per entry: date · name · Done / Next / Problems / Commit.
 
 ---
 
+## 20.11.2026 · Nebil (8) · main · contract change requested by Emrecan
+- **Done:** technical_design.md first, then code: `PDA_Tuning` / `DA_Tuning` + `Weapon_Range` 5000 cm, `Weapon_StartReserve` 48 (21 fields); `State.Dead` is added by the dying actor in its own `OnDied` (BP_Player: Emrecan, BP_Frostling: Kartal); `BPC_Weapon` damages only `Team.Frost` and not `State.Dead`; new interface `Core/Interfaces/BPI_Tagged.GetGameplayTags() → Tags` so systems read another actor's tags without a cast; `BP_EmberCore` implements it (returns `GameplayTags`).
+- **Tested:** DA_Tuning shows the 2 new values; PIE in L_Chapter1: `core.GetGameplayTags()` → `Target.EmberCore`, Ember still drains (89.67 at t=10.33); BP_EmberCore class implements `BPI_Tagged_C`.
+- **Next:** Emrecan, Kartal, Karahan: implement `BPI_Tagged` on your tagged actors (BP_Player, BP_Frostling, BP_FuelPickup); Kül Şehri doc: same changes.
+- **Commit:** `[Nebil] contracts: weapon tuning fields, State.Dead rule, BPI_Tagged`
+
 ## 20.11.2026 · Nebil (7) · main
 - **Done:** checked the team plan (Kül Şehri doc) against the repo: Nebil's rule mapping for B1 is complete (team-unreal ← unreal-gotchas R1/R3/R4/R7/R13/R14, team-rules ← my-workflow R2/R3/R8/R10/R11/R13, team-build ← unreal-packaging + script). Added today's lessons: team-unreal R8 `GameplayTags` name, R9 VibeUE traps, R10 connected floor in `L_Chapter1`; team-rules R8 git under an open editor, R9 §4.2b functions.
 - **Next:** team sends 3–5 rules each (B1 needs every name); Kül Şehri doc: `Tags` → `GameplayTags`, add §4.2b; invite collaborators and share the repo link.
