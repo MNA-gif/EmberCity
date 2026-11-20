@@ -4,6 +4,13 @@ Format per entry: date · name · Done / Next / Problems / Commit.
 
 ---
 
+## 20.11.2026 · Nebil (5) · branch `nebil/ember`
+- **Done:** `Systems/Nebil/BP_ChapterDirector` (Actor, one per level): BeginPlay prints `[Chapter] Started`, finds `BP_EmberCore`, stores its `Ember` and binds `OnEmberDepleted` → `EndChapter(false)`, `OnEmberIgnited` → `EndChapter(true)`. `EndChapter(bWonIn)` runs once (`bEnded`), stops the Ember, calls `OnChapterEnded(bWon)`, prints the result, and if `EndScreenClass` is set creates it, adds to viewport, input Game and UI + cursor (team-unreal R4). `RetryChapter()` = Game Only, hide cursor, reopen current level. Contracts §4.2b added (callable functions, `EndScreenClass`, player death pending `BPC_Health`). Dev widget `WBP_EndScreenTest` (empty) set only on the director placed in `L_Test_Nebil`.
+- **Tested (PIE, L_Test_Nebil):** win: 5 fuel → log `[Chapter] Ended, won = true`, bEnded/bWon true, cursor on; 500 damage after the win → no second end. Retry → level reloads (t=0.67, Heat 99.3, Fuel 0, bEnded false, cursor off). Fail: ApplyDamage(500) → `[Chapter] Ended, won = false`, cursor on. No Blueprint runtime errors in the log.
+- **Not tested:** player death (needs Emrecan's `BPC_Health`); a real end screen (Karahan's `WBP_EndScreen`); Retry clicked from a button.
+- **Next:** merge `nebil/ember` → main; NavMesh + Game Default Map + director/core in `L_Chapter1` on main; tell the team about `GameplayTags` and §4.2b.
+- **Commit:** `[Nebil] chapter: BP_ChapterDirector win/fail/retry`
+
 ## 20.11.2026 · Nebil (4) · branch `nebil/ember`
 - **Done:** `Systems/Nebil/BPC_Ember` (Actor Component): `Tuning`=DA_Tuning, `Heat/MaxHeat/FuelDelivered/bActive`; BeginPlay sets heat from `Ember_StartHeat`; Tick drains `Ember_DrainPerSecond`; function `ChangeHeat(Delta)` clamps 0..MaxHeat and calls `OnHeatChanged(Heat, MaxHeat)`, at 0 calls `OnEmberDepleted`; events `AddFuel(Amount int)` (+`Ember_HeatPerFuel` each, `Chapter_FuelToWin` reached → `OnEmberIgnited`), `LoseHeat(Amount float)`, `StopEmber`. `BP_EmberCore` (Actor): cylinder placeholder + `Ember` component, `GameplayTags`=`Target.EmberCore`, implements `BPI_Damageable` (Amount × `Ember_DamageToHeat` → LoseHeat) and `BPI_FuelReceiver` (→ AddFuel). Dev helper `BP_EmberDebug` prints the 3 dispatchers. Contract change: tag variable is `GameplayTags` (not `Tags`, clashes with AActor::Tags) in technical_design §4.3.
 - **Tested (PIE, L_Test_Nebil):** drain 100→95.20 at t=4.80 s (1/s); ReceiveFuel(1) +15 (clamped at 100), Fuel=1; ApplyDamage(20) −10; 5 fuel → bActive=false + log `[EmberDebug] OnEmberIgnited`; ApplyDamage(500) → Heat 0 + `OnEmberDepleted`. B5: DA_Tuning `Ember_DrainPerSecond` 1→5 without opening a BP → Heat 56.67 at t=8.67 s (5/s); set back to 1.0.

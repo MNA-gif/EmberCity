@@ -61,6 +61,17 @@ Rules:
 | `OnWaveStarted` | `BP_FrostSpawner` | `WaveIndex: int, WaveCount: int` | `WBP_HUD` | Kartal |
 | `OnChapterEnded` | `BP_ChapterDirector` | `bWon: bool` | `WBP_EndScreen`, `BP_FrostSpawner` (stops), `BPC_FrostBrain` (stops) | Nebil |
 
+### 4.2b Functions other systems may call (added 20.11.2026, Nebil)
+
+| Function | On | Called by | Owner |
+|---|---|---|---|
+| `AddFuel(Amount: int)`, `LoseHeat(Amount: float)`, `StopEmber()` | `BPC_Ember` | `BP_EmberCore` (through the interfaces), `BP_ChapterDirector` | Nebil |
+| `RetryChapter()` | `BP_ChapterDirector` | `WBP_EndScreen` Retry button (finds the director with Get Actor Of Class) | Nebil |
+| `EndChapter(bWon: bool)` | `BP_ChapterDirector` | only the director itself (Ember events, player `OnDied`) | Nebil |
+
+`BP_ChapterDirector.EndScreenClass` (UserWidget class, Instance Editable): set to `WBP_EndScreen` in `L_Chapter1` after Karahan's widget is on main. The director creates it on chapter end, sets input Game and UI + mouse cursor; `RetryChapter` sets Game Only, hides the cursor and reloads the level. The widget reads `bWon` from `OnChapterEnded`.
+Player death: the director binds to the player's `BPC_Health.OnDied` once Emrecan's component is on main; until then `EndChapter(false)` is reached only by `OnEmberDepleted`.
+
 ### 4.3 Gameplay tags (`Config/DefaultGameplayTags.ini`, owner Nebil)
 
 Every gameplay actor has a variable `GameplayTags` of type `GameplayTagContainer` (Instance Editable); systems find each other by tag. (Not `Tags`: that name is already AActor's built-in `TArray<FName>` and cannot be reused. Changed 20.11.2026 by Nebil.)
