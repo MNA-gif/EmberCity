@@ -63,7 +63,7 @@ Rules:
 
 ### 4.3 Gameplay tags (`Config/DefaultGameplayTags.ini`, owner Nebil)
 
-Every gameplay actor has a variable `Tags` of type `GameplayTagContainer`; systems find each other by tag.
+Every gameplay actor has a variable `GameplayTags` of type `GameplayTagContainer` (Instance Editable); systems find each other by tag. (Not `Tags`: that name is already AActor's built-in `TArray<FName>` and cannot be reused. Changed 20.11.2026 by Nebil.)
 
 | Tag | On | Used for | Owner |
 |---|---|---|---|
