@@ -32,3 +32,8 @@ _sessions/
 # Per-user editor folders
 Content/Developers/
 Content/Collections/
+
+# Full Fab packs stay local (download again from Fab "My Library");
+# only the pieces we use are moved into Content/EmberCity/Art/ and committed.
+Content/AbandonedPowerPlant/
+Content/RetroFuturisticSoldier/

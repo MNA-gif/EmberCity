@@ -55,6 +55,7 @@ Rules:
 | `OnHealthChanged` | `BPC_Health` | `Current: float, Max: float` | `WBP_HUD` | Emrecan |
 | `OnDied` | `BPC_Health` | `DeadActor: Actor` | `BP_ChapterDirector` (player died = fail), `BP_FrostSpawner` (alive count) | Emrecan |
 | `OnAmmoChanged` | `BPC_Weapon` | `InMag: int, Reserve: int` | `WBP_HUD` | Emrecan |
+| `OnHitConfirmed` | `BPC_Weapon` | `HitActor: Actor` (a shot that damaged a `Team.Frost` actor) | `WBP_HUD` (hit marker) | Emrecan |
 | `OnHeatChanged` | `BPC_Ember` | `Heat: float, MaxHeat: float` | `WBP_HUD` | Nebil |
 | `OnEmberDepleted` | `BPC_Ember` | — | `BP_ChapterDirector` (fail) | Nebil |
 | `OnEmberIgnited` | `BPC_Ember` | — | `BP_ChapterDirector` (win) | Nebil |
@@ -105,9 +106,18 @@ Every gameplay actor has a variable `GameplayTags` of type `GameplayTagContainer
 | `Weapon_ReloadTime` | 1.5 | s | `BPC_Weapon` | Emrecan |
 | `Weapon_Range` | 5000 | cm | `BPC_Weapon` (line trace length) | Emrecan |
 | `Weapon_StartReserve` | 48 | rounds | `BPC_Weapon` (reserve ammo at start, 4 magazines) | Emrecan |
+| `Weapon_RecoilPitch` | 0.35 | deg | `BP_Player` (camera kicks up by this much per shot) | Emrecan |
+| `Weapon_FireShakeScale` | 0.25 | multiplier | `BP_Player` (camera shake scale per shot) | Emrecan |
+| `Player_HurtShakeScale` | 1.0 | multiplier | `BP_Player` (camera shake scale when the player takes damage) | Emrecan |
+| `Feedback_HitMarkerTime` | 0.15 | s | `WBP_HUD` (hit marker on screen after `OnHitConfirmed`) | Karahan |
+| `Feedback_HurtVignetteTime` | 0.4 | s | `WBP_HUD` (red screen edge fade after health goes down) | Karahan |
+| `Feedback_HitFlashTime` | 0.08 | s | `BP_Frostling` (red flash on the body after it takes damage) | Kartal |
 | `Frost_WalkSpeed` | 300 | cm/s | `BPC_FrostBrain` | Kartal |
 | `Frost_AttackDamage` | 10 | health | `BPC_FrostBrain` | Kartal |
 | `Frost_AttackInterval` | 1.2 | s | `BPC_FrostBrain` | Kartal |
+| `Frost_ShootRange` | 2500 | cm | `BPC_FrostBrain` (stops and shoots the player inside this range with a clear line of sight) | Kartal |
+| `Frost_HitChance` | 0.35 | 0..1 | `BPC_FrostBrain` (chance that one Frost shot hits the player; damage = `Frost_AttackDamage`) | Kartal |
+| `Frost_StrafeRadius` | 300 | cm | `BPC_FrostBrain` (when no cover point hides the Frost from the player, it side-steps to a random reachable point within this radius between shots) | Kartal |
 | `Spawner_WaveCount` | 3 | waves | `BP_FrostSpawner` | Kartal |
 | `Spawner_EnemiesPerWave` | 4 | enemies | `BP_FrostSpawner` | Kartal |
 | `Spawner_TimeBetweenWaves` | 25 | s | `BP_FrostSpawner` | Kartal |

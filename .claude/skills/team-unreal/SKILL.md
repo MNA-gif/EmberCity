@@ -56,5 +56,35 @@ Each rule says who brought it.
 - **Why:** NavMesh test on 20.11: the Core was reachable from 19 of 24 random floor points; the misses were pockets around (-1539,-1433), (1667,-1587), (126,-456).
 - **Check:** `NavigationSystemV1.find_path_to_location_synchronously(world, spawn, core_side_point)` is valid and not partial for every spawn point; or `P` in the viewport shows green connected to the Core.
 
+### R11 · Line-trace weapons need targets that block `Visibility` `[Nebil]`
+- **Rule:** the template `Pawn` (capsule) and `CharacterMesh` profiles **ignore** the `Visibility` channel. Every actor the weapon must hit (Frost) sets its capsule's `Visibility` response to **Block**.
+- **Why:** 21.11: `BPC_ProtoWeapon` fired, ammo went down, Frost took no damage - the trace went through it.
+- **Check:** in PIE aim at a Frost, fire once: its health drops.
+
+### R12 · Actors that AI walks to must not cut a hole in the NavMesh `[Nebil]`
+- **Rule:** the Core's mesh has `Can Ever Affect Navigation = false`; AI targets are reached through an overlap zone around them, not by touching the mesh.
+- **Why:** 21.11: `SimpleMoveToActor(Core)` did nothing - no path ends inside the hole the cylinder made.
+- **Check:** `find_path_to_actor_synchronously(world, spawn, core)` has points and is not partial.
+
+### R13 · VibeUE nodes that crash the editor's Python `[Nebil]`
+- **Rule:** create Spawn Actor with the localized spawner key from `discover_nodes(bp, "Sınıf")` (`SPAWN K2Node_SpawnActorFromClass|…`), never `NODE K2Node_SpawnActorFromClass`; read a macro's pin names (`ForLoop`: `execute`, `LoopBody`, `FirstIndex`…) with `get_node_pins` before wiring. Interface calls on another actor: `Cast To BPI_x` (interface cast) → call on `AsBPI x`.
+- **Why:** both crashed Python on 21.11 (editor restart each time); interface function nodes reject a plain Actor pin.
+- **Check:** create risky nodes alone in one call and print their pins first.
+
+### R14 · Python `unreal.Rotator(a, b, c)` is roll, pitch, yaw `[Nebil]`
+- **Rule:** always use keywords: `unreal.Rotator(roll=0, pitch=0, yaw=-90)`. A Material on a skeletal mesh needs `used_with_skeletal_mesh = True`, or it renders as the grey default.
+- **Why:** 21.11: `Rotator(0,-90,0)` laid every Frost flat on the floor ("yatay sürünüyorlar"); the icy Frost material showed grey until the flag was set.
+- **Check:** after a mesh rotation/material change, one screenshot in PIE (`HighResShot 1` → `Saved/Screenshots` when `capture_image` fails).
+
+### R15 · First-person arms, AI walk, Fab packs `[Nebil]`
+- **Rule:** (1) the template `FirstPersonMesh` copies the BODY mesh pose (`ABP_FP_Copy`): change the arms by giving the body mesh an AnimBP (upper body layered from `spine_01`), never by playing anims on the arms; attach the gun to the camera, not to an arm bone. (2) AI characters using `ABP_Unarmed` need `NavMovementProperties.bUseAccelerationForPaths = true`, else they slide in idle. (3) A Fab pack goes in through the launcher "Add to Project"; move only the used assets + dependencies into `Content/EmberCity/Art/<Pack>/`, resave them, downsize textures to 1K, and keep the full pack folder in `.gitignore`.
+- **Why:** 21.11: arms showed the running pose with a floating gun; Frost slid without walking; one free pack was 890 MB and one pistol 499 MB.
+- **Check:** in PIE run + shoot: hands keep the pistol pose; Frost `ShouldMove` is true while walking; `git status` shows no files from the pack folder.
+
+### R16 · Guns in hands: use the template's shooter rig, do not hand-tune offsets `[Nebil]`
+- **Rule:** weapon meshes snap to the mannequin socket `HandGrip_R` (no offset); first-person arms use `ABP_FP_Pistol` (our copy `ABP_ProtoFPPistol`), bodies/NPCs use `ABP_TP_Pistol`. Content comes from the engine's `Templates/TemplateResources/Standard/Variant_Shooter` + `Weapons` (copied into `Content/`). If a copied AnimBP casts to `BP_ShooterCharacter`, cast to our character class instead.
+- **Why:** 21.11: three rounds of hand-measured offsets + IK still looked broken ("eller tam kavramıyor"); the template rig was right on the first try.
+- **Check:** in PIE the right hand closes on the grip, and `Aim Target` on the FP anim instance is not (0,0,0).
+
 ## From the team (to be merged)
 <!-- Emrecan (weapon/health), Kartal (AI), Karahan (UI): add the traps you hit as R8+ with your name. -->
