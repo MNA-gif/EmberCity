@@ -88,3 +88,28 @@ Each rule says who brought it.
 
 ## From the team (to be merged)
 <!-- Emrecan (weapon/health), Kartal (AI), Karahan (UI): add the traps you hit as R8+ with your name. -->
+
+### R11 · The Frost cannot `MoveToActor` onto the Core: walk to a point beside it `[Kartal]`
+- **Rule:** for targets that carve the NavMesh (the Core, big props), move to a reachable point just outside the target's bounds (project it with `ProjectPointToNavigation`), then attack on arrival. Attack distance comes from `DA_Tuning` (`Frost_AttackRange`, requested), never a typed number.
+- **Why:** `BP_EmberCore` cuts a hole in the NavMesh, so `MoveToActor(Core)` failed with no error and the Frost stood still (21.11, `BPC_FrostBrain`).
+- **Check:** in PIE a Frost with only the Core as target reaches it and the Core's heat drops.
+
+### R12 · VibeUE: never spawn `K2Node_SpawnActorFromClass` by key `[Kartal]`
+- **Rule:** to spawn actors in a graph built through VibeUE, use `BeginDeferredActorSpawnFromClass` + `FinishSpawningActor` (call-function nodes), not `create_node_by_key("NODE K2Node_SpawnActorFromClass")`.
+- **Why:** that key crashed UE 5.8 while building `BP_FrostSpawner` (21.11).
+- **Check:** the spawner graph compiles with 0 errors and PIE spawns the wave.
+
+### R13 · After an editor crash, the Crash Reporter can hold the MCP port `[Kartal]`
+- **Rule:** if MCP stays dead after a crash and `StartServer`, check who listens on port 8000 (`lsof -nP -iTCP:8000 -sTCP:LISTEN`). If it is `CrashReportClient`, close it, then run `ModelContextProtocol.StartServer` again.
+- **Why:** on 21.11 a leftover Crash Reporter held port 8000 and every MCP call failed with HTTP 000.
+- **Check:** `lsof` shows `UnrealEditor` on 8000 and one cheap MCP call works.
+
+### R14 · Sizing a NavMeshBoundsVolume from mesh bounds: skip the sky sphere `[Kartal]`
+- **Rule:** ignore `SM_SkySphere` and any mesh with an extent over 200 m. If a volume was ever oversized, delete `RecastNavMesh-Default` and Build Paths again; `RebuildNavigation` alone does not fix it.
+- **Why:** the sky sphere made my volume 32 km wide, the RecastNavMesh kept a tiny tile pool ("3 tile limit reached") and the navmesh stayed empty (Part A, F53).
+- **Check:** `NavigationSystemV1.project_point_to_navigation` returns a point at 3 floor spots, and `P` shows green.
+
+### R15 · Python rotators use named values `[Kartal]`
+- **Rule:** always `unreal.Rotator(pitch=0, yaw=90, roll=0)`, never positional.
+- **Why:** the positional order is (roll, pitch, yaw); my meshes ended up lying on the floor (Part A, F03).
+- **Check:** read the actor's rotation back after placing it and print it.
