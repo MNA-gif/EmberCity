@@ -108,6 +108,7 @@ Every gameplay actor has a variable `GameplayTags` of type `GameplayTagContainer
 | `Weapon_StartReserve` | 48 | rounds | `BPC_Weapon` (reserve ammo at start, 4 magazines) | Emrecan |
 | `Weapon_RecoilPitch` | 0.35 | deg | `BP_Player` (camera kicks up by this much per shot) | Emrecan |
 | `Weapon_FireShakeScale` | 0.25 | multiplier | `BP_Player` (camera shake scale per shot) | Emrecan |
+| `Player_CrouchSpeed` | 200 | cm/s | `BP_Player` (walk speed while crouched; hold Left Ctrl or toggle C) | Nebil |
 | `Player_HurtShakeScale` | 1.0 | multiplier | `BP_Player` (camera shake scale when the player takes damage) | Emrecan |
 | `Feedback_HitMarkerTime` | 0.15 | s | `WBP_HUD` (hit marker on screen after `OnHitConfirmed`) | Karahan |
 | `Feedback_HurtVignetteTime` | 0.4 | s | `WBP_HUD` (red screen edge fade after health goes down) | Karahan |
@@ -118,6 +119,9 @@ Every gameplay actor has a variable `GameplayTags` of type `GameplayTagContainer
 | `Frost_ShootRange` | 2500 | cm | `BPC_FrostBrain` (stops and shoots the player inside this range with a clear line of sight) | Kartal |
 | `Frost_HitChance` | 0.35 | 0..1 | `BPC_FrostBrain` (chance that one Frost shot hits the player; damage = `Frost_AttackDamage`) | Kartal |
 | `Frost_StrafeRadius` | 300 | cm | `BPC_FrostBrain` (when no cover point hides the Frost from the player, it side-steps to a random reachable point within this radius between shots) | Kartal |
+| `Frost_EyeHeight` | 150 | cm above the feet | `BPC_FrostBrain` (line-of-sight check height; a crouched Frost still "peeks" from standing height) | Kartal |
+| `Frost_PeekTime` | 0.6 | s | `BPC_FrostBrain` (at cover the Frost stands up to shoot, then crouches again after this time) | Kartal |
+| `Frost_CrouchSpeed` | 150 | cm/s | `BPC_FrostBrain` (walk speed while crouched) | Kartal |
 | `Spawner_WaveCount` | 3 | waves | `BP_FrostSpawner` | Kartal |
 | `Spawner_EnemiesPerWave` | 4 | enemies | `BP_FrostSpawner` | Kartal |
 | `Spawner_TimeBetweenWaves` | 25 | s | `BP_FrostSpawner` | Kartal |

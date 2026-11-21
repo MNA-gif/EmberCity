@@ -4,6 +4,51 @@ Format per entry: date · name · Done / Next / Problems / Commit.
 
 ---
 
+## 21.11.2026 · Nebil (20) · branch `nebil/prototype` · L_Chapter1 rebuilt as a collapsed turbine hall
+- **Done:**
+  - **Removed:** all LevelPrototyping blockout (cubes, ramps, cylinders) and the old `Dressing/Facades` + `Dressing/Rubble`. The template `Floor` is hidden but kept as collision.
+  - **New `Env/*` folders** from Abandoned Power Plant:
+    - Concrete floor (14×14 tiles).
+    - 2-storey perimeter walls with windows, inner reinforcement pillars and corner columns.
+    - Doors (west by the Frost spawner, east behind the core) with small closed rooms behind.
+    - A ceiling strip along the walls and rusty roof beams with a collapsed span in the middle (sky and sun come in).
+    - North and south catwalks at 2 m: platforms, beam railing, posts and 4 stairways.
+    - Fallen beams, rubble along the walls, and moss/leak decals on floor and walls.
+  - **Kept:** the 12 cover walls with 24 cover points, the core, the spawner and the fuel pickups. PlayerStart moved to (600, 0, 100), facing the spawner.
+  - **Light:**
+    - Sun at pitch −58.
+    - Height fog at 0.01, volumetric fog off.
+    - `PPV_Hall`: vignette, bloom 0.5, white temp 5600.
+    - Red door lamps, a warm core heat light and cold catwalk lamps.
+  - **Materials:** floor, beam and wall MIs slightly darker and less saturated.
+  - **Asset migration:** new used assets moved from the gitignored pack to `Art/PowerPlant` with their materials and textures; 0 references to `/Game/AbandonedPowerPlant` left. 11 large textures downsized (floor 2K, others 1K). `Art/PowerPlant` is 74 MB (291 MB before).
+- **Tested:**
+  - NavMesh: spawner→core 2548 cm; 24/24 cover points and all 8 fuel pickups reachable.
+  - PIE screenshots from the player view: robots come through the west door and take the cover walls.
+  - 0 Blueprint runtime errors.
+- **Problems / gotchas:**
+  - In UE, a higher post-process `White Temp` makes the image warmer (7000 turned it yellow).
+  - Volumetric fog with strong lights washed the hall out to white.
+  - The catwalk stairs are 45°, so Frost cannot path up (the player can climb them).
+- **Commit:** `[Nebil] chapter1: rebuild the arena as a collapsed power-plant hall`
+
+## 21.11.2026 · Nebil (19) · branch `nebil/prototype` · crouch + RobotBody error fix
+- **Done:**
+  - **Error fix:** "RobotBody accessed none" happened because the hit-flash `SetOverlayMaterial` ran on a Frost already destroyed by the killing shot (and again after the Delay). Both calls are now behind `IsValid(RobotBody)`.
+  - **Player crouch:** hold Left Ctrl, or press C to toggle. `bCanCrouch` is on; crouched speed is `Player_CrouchSpeed`.
+  - **Frost crouch:** crouches at its cover point (speed `Frost_CrouchSpeed`), stands up to shoot, and crouches again after `Frost_PeekTime` (`PeekDone` event). It stands while moving, strafing or going back to the core.
+  - **Line of sight:** the check now starts at `Frost_EyeHeight` above the feet, so a crouched Frost still "peeks".
+  - 4 new `DA_Tuning` fields documented first.
+  - **Crouch animations:** 6 Manny crouch assets (idle, 4 walks, `BS_MM_CrouchStrafe`) come from the engine's own MoverExamples plugin (no download, 3 MB). They were loaded once through a temporary `[CoreRedirects]` onto our `SK_Mannequin`, resaved and moved to `Content/EmberCity/Art/Crouch`; the redirect is removed again.
+  - **Crouch pose:** `ABP_ProtoTPPistol` (copy of `ABP_TP_Pistol`) uses the crouch blendspace for the lower body when `IsCrouched` (Blend Poses by bool, 0.2 s); the upper body keeps the pistol aim. Used by the Frost `Mesh` (the robot follows it) and the player body.
+  - **Player camera:** the FP arms do not copy the body pose, so `OnStartCrouch`/`OnEndCrouch` move `FirstPersonMesh` (with the camera) down and up by the capsule change.
+- **Tested (PIE):**
+  - Key C toggles crouch: camera z 377.6 → 321.6 → 377.6, crouched speed 200.
+  - A Frost at its cover point crouched by itself: head 104 cm above the feet (156 standing). Screenshot: a robot crouched behind a low wall, aiming.
+  - 2 Frost killed → no RobotBody error.
+  - 0 Blueprint runtime errors in 4 PIE runs.
+- **Not tested:** Left Ctrl hold, only C was injected. Crouch walk while moving (the robots crouch only when standing at cover).
+
 ## 21.11.2026 · Nebil (18) · branch `nebil/prototype` · cover AI, fire feel, hit feedback
 - **Done:**
   - **Map:** 12 low walls (`SM_Wall_Plain_300`, 130 cm high) in `Dressing/Cover` of `L_Chapter1`, with 24 `BP_ProtoCoverPoint` actors, one on each side of every wall. NavMesh rebuilt.
