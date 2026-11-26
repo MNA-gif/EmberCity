@@ -4,6 +4,25 @@ Format per entry: date · name · Done / Next / Problems / Commit.
 
 ---
 
+## 26.11.2026 · Nebil (21) · branch `nebil/audio` · team audio (Skill Dojo R3)
+- **Done:**
+  - **Skill:** `.claude/skills/team-audio` (10 rules with why + check, plus `reference.md`).
+  - **Audio core:** `Audio/Core` holds `SC_Master` ← `SC_Music`, `SC_SFX`, the `SM_Volumes` mix, `ATT_SFX_Near` / `ATT_SFX_Far` attenuation and `SCON_Repeat` concurrency (max 4).
+  - **My 3 event sounds (CC0):**
+    - `SFX_Weapon_Shot` (0.35 s, pitch 0.92–1.08, near attenuation) on the player's `OnShotFired` and the Frost shot.
+    - `SFX_Core_FuelDelivered` on `BP_EmberCore.ReceiveFuel`.
+    - `SFX_Chapter_Win` / `SFX_Chapter_Lose` in `BP_ChapterDirector.EndChapter`.
+  - **Music:** `BP_MusicDirector` in `L_Chapter1` crossfades `MUS_Explore` and `MUS_Danger` over 2 s. Danger = nearest Frost within `Audio_DangerRadius` (2500, new `DA_Tuning` field), checked on a 0.5 s timer.
+  - **Settings:** `BP_AudioSave` (slot `AudioSettings`) is loaded and applied at start. Pause menu `WBP_ProtoPause` (key P) has Master / Music / SFX sliders that save on change.
+  - `credits.md` added.
+- **Tested (PIE):**
+  - Explore music starts and switches to danger with both tracks heard during the fade; at 16 s only danger plays.
+  - Music saved at 0.2 → PIE restarted → loaded 0.2 (then reset to 0.7).
+  - P pauses the game; the sliders show the saved 1.0 / 0.7 / 0.8.
+  - All Blueprints compile clean.
+- **Not tested:** nobody has listened yet (the editor was unfocused); the pause menu layout was not seen in play (the preview render overlaps the rows).
+- **Next:** Emrecan, Kartal and Karahan each add 3 sounds on their own systems in `Audio/SFX/<Name>/` with rows in `credits.md`.
+
 ## 21.11.2026 · Nebil (20) · branch `nebil/prototype` · L_Chapter1 rebuilt as a collapsed turbine hall
 - **Done:**
   - **Removed:** all LevelPrototyping blockout (cubes, ramps, cylinders) and the old `Dressing/Facades` + `Dressing/Rubble`. The template `Floor` is hidden but kept as collision.

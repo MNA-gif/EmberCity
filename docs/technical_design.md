@@ -122,6 +122,7 @@ Every gameplay actor has a variable `GameplayTags` of type `GameplayTagContainer
 | `Frost_EyeHeight` | 150 | cm above the feet | `BPC_FrostBrain` (line-of-sight check height; a crouched Frost still "peeks" from standing height) | Kartal |
 | `Frost_PeekTime` | 0.6 | s | `BPC_FrostBrain` (at cover the Frost stands up to shoot, then crouches again after this time) | Kartal |
 | `Frost_CrouchSpeed` | 150 | cm/s | `BPC_FrostBrain` (walk speed while crouched) | Kartal |
+| `Audio_DangerRadius` | 2500 | cm | `BP_MusicDirector` (danger music when a living Frost is this close to the player; checked every 0.5 s) | Nebil |
 | `Spawner_WaveCount` | 3 | waves | `BP_FrostSpawner` | Kartal |
 | `Spawner_EnemiesPerWave` | 4 | enemies | `BP_FrostSpawner` | Kartal |
 | `Spawner_TimeBetweenWaves` | 25 | s | `BP_FrostSpawner` | Kartal |
